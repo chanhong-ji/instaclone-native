@@ -5,8 +5,12 @@ import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import LoggedOutNav from "./navigators/LoggedOutNav";
+import { Appearance } from "react-native";
+import { ThemeProvider } from "styled-components/native";
+import { darkTheme, lightTheme } from "./theme";
 
 export default function App() {
+  const [dark, setDark] = useState(Appearance.getColorScheme());
   const [loading, setLoading] = useState(true);
   const onFinish = () => setLoading(false);
   const preload = () => {
@@ -16,6 +20,9 @@ export default function App() {
     const assetPromises = assetsToLoad.map((asset) => Asset.loadAsync(asset));
     Promise.all([...fontPromises, ...assetPromises]);
   };
+  Appearance.addChangeListener(({ colorScheme }) =>
+    colorScheme === "dark" ? setDark(true) : setDark(false)
+  );
   if (loading)
     return (
       <AppLoading
@@ -25,8 +32,10 @@ export default function App() {
       />
     );
   return (
-    <NavigationContainer>
-      <LoggedOutNav />
-    </NavigationContainer>
+    <ThemeProvider theme={dark ? darkTheme : lightTheme}>
+      <NavigationContainer>
+        <LoggedOutNav />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
