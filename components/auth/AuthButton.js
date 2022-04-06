@@ -1,13 +1,14 @@
-import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
+import { ActivityIndicator } from "react-native";
 
 const Button = styled.TouchableOpacity`
-  width: 80%;
+  width: 100%;
   align-items: center;
-  padding: 13px 0;
+  padding: 15px 10px;
   border-radius: 3px;
   background-color: ${(props) => props.theme.color.accent};
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
 const ButtonText = styled.Text`
@@ -15,10 +16,11 @@ const ButtonText = styled.Text`
   font-size: ${(props) => props.theme.size.button};
 `;
 
-function AuthButton({ text, disabled = false, onPress }) {
+function AuthButton({ text, disabled = false, onPress, loading }) {
+  console.log(loading);
   return (
-    <Button onPress={onPress} disabled={disabled}>
-      <ButtonText>{text}</ButtonText>
+    <Button onPress={onPress} disabled={disabled} loading={loading}>
+      {loading ? <ActivityIndicator /> : <ButtonText>{text}</ButtonText>}
     </Button>
   );
 }
@@ -27,6 +29,7 @@ AuthButton.prototype = {
   text: PropTypes.string.isRequired,
   disable: PropTypes.bool,
   onPress: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default AuthButton;

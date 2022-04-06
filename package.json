@@ -10,7 +10,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.10",
     "@react-native-masked-view/masked-view": "^0.2.6",
+    "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/stack": "^6.2.1",
     "expo": "~44.0.0",
@@ -18,9 +20,11 @@
     "expo-asset": "~8.4.6",
     "expo-font": "~10.0.4",
     "expo-status-bar": "~1.2.0",
+    "graphql": "^16.3.0",
     "prop-types": "^15.8.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-hook-form": "^7.29.0",
     "react-native": "0.64.3",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-safe-area-context": "3.3.2",

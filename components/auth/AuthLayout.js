@@ -1,3 +1,9 @@
+import {
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+} from "react-native";
 import styled from "styled-components/native";
 
 const Container = styled.View`
@@ -5,22 +11,33 @@ const Container = styled.View`
   background-color: ${(props) => props.theme.color.bg};
   justify-content: center;
   align-items: center;
+  padding: 0 10%;
 `;
 
 const Logo = styled.Image`
-  max-width: 50%;
+  width: 80%;
+  max-width: 200px;
   height: 150px;
+  margin: 0 auto;
 `;
 
 function AuthLayout({ children }) {
   return (
-    <Container>
-      <Logo
-        resizeMode="contain"
-        source={require("../../assets/instagram_logo.png")}
-      />
-      {children}
-    </Container>
+    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss()}>
+      <Container>
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={{ width: "100%" }}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
+        >
+          <Logo
+            resizeMode="contain"
+            source={require("../../assets/instagram_logo.png")}
+          />
+          {children}
+        </KeyboardAvoidingView>
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
 
