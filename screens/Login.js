@@ -3,29 +3,64 @@ import AuthLayout from "../components/auth/AuthLayout";
 import { useForm } from "react-hook-form";
 import AuthButton from "../components/auth/AuthButton";
 import { TextInput, toNext } from "../components/auth/AuthShared";
+import { gql, useMutation } from "@apollo/client";
+import { getUserLogin } from "../apollo";
+import { Alert } from "react-native";
 
-export default function Login({ navigation }) {
-  const { register, handleSubmit, setValue } = useForm();
+const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      ok
+      error
+      token
+    }
+  }
+`;
+
+export default function Login({ navigation, route: { params } }) {
+  const { register, handleSubmit, setValue, watch } = useForm({
+    defaultValues: {
+      username: params?.username,
+      password: params?.password,
+    },
+  });
   const passwordRef = useRef();
-  const onValid = (data) => {};
+
+  const onCompleted = async (data) => {
+    const {
+      login: { ok, error, token },
+    } = data;
+    if (!ok) return Alert.alert("Fail", String(error));
+    await getUserLogin(token);
+  };
+  const [login, { loading }] = useMutation(LOGIN, { onCompleted });
+
+  const onValid = (data) => {
+    if (loading) return;
+    login({ variables: { ...data } });
+  };
+
   useEffect(() => {
-    register("username");
-    register("password");
+    register("username", { required: true });
+    register("password", { required: true });
   }, [register]);
+
   return (
     <AuthLayout>
       <TextInput
+        value={watch("username")}
         placeholder="username"
-        autoCapitalize={false}
+        autoCapitalize="none"
         autoFocus
         returnKeyType="next"
         placeholderTextColor="grey"
-        onSubmitEditing={toNext(passwordRef)}
+        onSubmitEditing={() => toNext(passwordRef)}
         onChangeText={(text) => setValue("username", text)}
       />
       <TextInput
+        value={watch("password")}
         placeholder="password"
-        autoCapitalize={false}
+        autoCapitalize="none"
         textContentType="password"
         returnKeyType="done"
         secureTextEntry
@@ -35,7 +70,12 @@ export default function Login({ navigation }) {
         onChangeText={(text) => setValue("password", text)}
         onSubmitEditing={handleSubmit(onValid)}
       />
-      <AuthButton text="Login" onPress={handleSubmit(onValid)} />
+      <AuthButton
+        text="Login"
+        onPress={handleSubmit(onValid)}
+        loading={loading}
+        disabled={!watch("username") || !watch("password")}
+      />
     </AuthLayout>
   );
 }

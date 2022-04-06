@@ -23,7 +23,10 @@ const Logo = styled.Image`
 
 function AuthLayout({ children }) {
   return (
-    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss()}>
+    <TouchableWithoutFeedback
+      style={{ flex: 1 }}
+      onPress={() => Keyboard.dismiss()}
+    >
       <Container>
         <KeyboardAvoidingView
           behavior="padding"

@@ -7,9 +7,6 @@ export const TextInput = styled.TextInput`
   margin-bottom: ${(props) => (props.lastone ? "20px" : "7px")};
   color: ${(props) => props.theme.color.text};
   background-color: ${(props) => props.theme.color.textInputBg};
-  :-ms-input-placeholder {
-    color: black;
-  }
 `;
 
 export const toNext = (nextRef) => nextRef?.current?.focus();

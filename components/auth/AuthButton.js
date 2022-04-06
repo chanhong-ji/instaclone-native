@@ -17,7 +17,6 @@ const ButtonText = styled.Text`
 `;
 
 function AuthButton({ text, disabled = false, onPress, loading }) {
-  console.log(loading);
   return (
     <Button onPress={onPress} disabled={disabled} loading={loading}>
       {loading ? <ActivityIndicator /> : <ButtonText>{text}</ButtonText>}

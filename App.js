@@ -7,18 +7,31 @@ import { NavigationContainer } from "@react-navigation/native";
 import LoggedOutNav from "./navigators/LoggedOutNav";
 import { Appearance } from "react-native";
 import { ThemeProvider } from "styled-components/native";
-import { darkTheme, lightTheme } from "./theme";
+import { darkTheme, defaultTheme, lightTheme } from "./theme";
+import { ApolloProvider, useReactiveVar } from "@apollo/client";
+import { client, LoggedInVar, tokenVar } from "./apollo";
+import LoggedInNav from "./navigators/LoggedInNav";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const [dark, setDark] = useState(Appearance.getColorScheme());
   const [loading, setLoading] = useState(true);
+  const LoggedIn = useReactiveVar(LoggedInVar);
   const onFinish = () => setLoading(false);
-  const preload = () => {
+  const preloadAssets = () => {
     const fontsToLoad = [Ionicons.font];
     const fontPromises = fontsToLoad.map((font) => Font.loadAsync(font));
     const assetsToLoad = [require("./assets/instagram_logo.png")];
     const assetPromises = assetsToLoad.map((asset) => Asset.loadAsync(asset));
-    Promise.all([...fontPromises, ...assetPromises]);
+    return Promise.all([...fontPromises, ...assetPromises]);
+  };
+  const preload = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      tokenVar(token);
+      LoggedInVar(true);
+    }
+    await preloadAssets();
   };
   Appearance.addChangeListener(({ colorScheme }) =>
     colorScheme === "dark" ? setDark(true) : setDark(false)
@@ -31,11 +44,17 @@ export default function App() {
         onError={console.warn}
       />
     );
+  const themeFn = (dark) => {
+    if (dark) return { ...darkTheme, ...defaultTheme };
+    return { ...lightTheme, ...defaultTheme };
+  };
   return (
-    <ThemeProvider theme={dark ? darkTheme : lightTheme}>
-      <NavigationContainer>
-        <LoggedOutNav />
-      </NavigationContainer>
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={() => themeFn(dark)}>
+        <NavigationContainer>
+          {LoggedIn ? <LoggedInNav /> : <LoggedOutNav />}
+        </NavigationContainer>
+      </ThemeProvider>
+    </ApolloProvider>
   );
 }
