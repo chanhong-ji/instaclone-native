@@ -24,7 +24,7 @@ function AuthButton({ text, disabled = false, onPress, loading }) {
   );
 }
 
-AuthButton.prototype = {
+AuthButton.propTypes = {
   text: PropTypes.string.isRequired,
   disable: PropTypes.bool,
   onPress: PropTypes.func.isRequired,

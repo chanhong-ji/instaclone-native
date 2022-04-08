@@ -14,7 +14,7 @@ import LoggedInNav from "./navigators/LoggedInNav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
-  const [dark, setDark] = useState(Appearance.getColorScheme());
+  const [dark, setDark] = useState(Appearance.getColorScheme() === "dark");
   const [loading, setLoading] = useState(true);
   const LoggedIn = useReactiveVar(LoggedInVar);
   const onFinish = () => setLoading(false);
@@ -36,6 +36,7 @@ export default function App() {
   Appearance.addChangeListener(({ colorScheme }) =>
     colorScheme === "dark" ? setDark(true) : setDark(false)
   );
+
   if (loading)
     return (
       <AppLoading
@@ -44,13 +45,16 @@ export default function App() {
         onError={console.warn}
       />
     );
-  const themeFn = (dark) => {
-    if (dark) return { ...darkTheme, ...defaultTheme };
-    return { ...lightTheme, ...defaultTheme };
-  };
+
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={() => themeFn(dark)}>
+      <ThemeProvider
+        theme={
+          dark
+            ? { ...darkTheme, ...defaultTheme }
+            : { ...lightTheme, ...defaultTheme }
+        }
+      >
         <NavigationContainer>
           {LoggedIn ? <LoggedInNav /> : <LoggedOutNav />}
         </NavigationContainer>
