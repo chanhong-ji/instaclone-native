@@ -5,7 +5,6 @@ import AuthButton from "../components/auth/AuthButton";
 import { TextInput, toNext } from "../components/auth/AuthShared";
 import { gql, useMutation } from "@apollo/client";
 import { getUserLogin } from "../apollo";
-import { Alert } from "react-native";
 
 const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
@@ -35,9 +34,9 @@ export default function Login({ navigation, route: { params } }) {
   };
   const [login, { loading }] = useMutation(LOGIN, { onCompleted });
 
-  const onValid = (data) => {
+  const onValid = ({ username, password }) => {
     if (loading) return;
-    login({ variables: { ...data } });
+    login({ variables: { username, password } });
   };
 
   useEffect(() => {

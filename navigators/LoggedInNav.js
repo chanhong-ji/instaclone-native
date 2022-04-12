@@ -1,25 +1,23 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useTheme } from "styled-components/native";
 import TabIcon from "../components/nav/TabIcon";
 import StackNavFactory from "../navigators/StackNavFactory";
+import { ThemeContext } from "styled-components/native";
+import { useContext } from "react";
+import { View } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 function LoggedInNav() {
-  let theme = useTheme();
+  const theme = useContext(ThemeContext);
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
+        headerShown: false,
         tabBarActiveTintColor: theme.color.text,
-        headerTintColor: theme.color.text,
         tabBarStyle: {
           backgroundColor: theme.color.bg,
           borderTopColor: theme.color.border,
-        },
-        headerStyle: {
-          backgroundColor: theme.color.bg,
-          shadowColor: theme.color.border,
         },
       }}
       sceneContainerStyle={{
@@ -46,6 +44,15 @@ function LoggedInNav() {
       >
         {() => <StackNavFactory screenName="Search" />}
       </Tab.Screen>
+      <Tab.Screen
+        name="Camera"
+        component={View}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <TabIcon name="camera" color={color} focused={focused} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="TabNotifications"
         options={{

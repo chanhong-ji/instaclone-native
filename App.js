@@ -7,7 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import LoggedOutNav from "./navigators/LoggedOutNav";
 import { Appearance } from "react-native";
 import { ThemeProvider } from "styled-components/native";
-import { darkTheme, defaultTheme, lightTheme } from "./theme";
+import { darkTheme, defaultTheme, lightTheme } from "./styles";
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
 import { client, LoggedInVar, tokenVar } from "./apollo";
 import LoggedInNav from "./navigators/LoggedInNav";
@@ -36,7 +36,6 @@ export default function App() {
   Appearance.addChangeListener(({ colorScheme }) =>
     colorScheme === "dark" ? setDark(true) : setDark(false)
   );
-
   if (loading)
     return (
       <AppLoading
