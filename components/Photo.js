@@ -5,6 +5,7 @@ import { useWindowDimensions, Image } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "styled-components/native";
+import { gql, useMutation } from "@apollo/client";
 
 const Container = styled.View`
   border: 1px solid ${(props) => props.theme.color.border};
@@ -48,11 +49,41 @@ const CaptionText = styled.Text`
   margin-left: 5px;
 `;
 
+const TOGGLELIKE_MUTATION = gql`
+  mutation toggleLike($photoId: Int!) {
+    toggleLike(photoId: $photoId) {
+      ok
+      error
+    }
+  }
+`;
+
 function Photo({ id, user, file, caption, likes, commentCount, isLiked }) {
   const theme = useContext(ThemeContext);
   const navigation = useNavigation();
   const { width: windowWidth, height } = useWindowDimensions();
   const [imgHeight, setImgHeight] = useState(0);
+
+  const updateLike = (cache, { data }) => {
+    const {
+      toggleLike: { ok, error },
+    } = data;
+    if (!ok) return;
+
+    cache.modify({
+      id: `Photo:${id}`,
+      fields: {
+        likes: (prev, { readField }) =>
+          readField("isLiked") ? prev - 1 : prev + 1,
+        isLiked: (prev) => !prev,
+      },
+    });
+  };
+  const [toggleLike] = useMutation(TOGGLELIKE_MUTATION, {
+    variables: { photoId: id },
+    update: updateLike,
+  });
+
   Image.getSize(file, (width, height) => {
     setImgHeight((windowWidth * height) / width);
   });
@@ -73,7 +104,7 @@ function Photo({ id, user, file, caption, likes, commentCount, isLiked }) {
       />
       <InfoContainer>
         <Actions>
-          <Action onPress={() => {}}>
+          <Action onPress={toggleLike}>
             <Ionicons
               name={isLiked ? "heart" : "heart-outline"}
               color={isLiked ? "red" : theme.color.text}

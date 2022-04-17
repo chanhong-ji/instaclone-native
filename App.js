@@ -9,9 +9,10 @@ import { Appearance } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, defaultTheme, lightTheme } from "./styles";
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
-import { client, LoggedInVar, tokenVar } from "./apollo";
+import { client, LoggedInVar, tokenVar, cache } from "./apollo";
 import LoggedInNav from "./navigators/LoggedInNav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AsyncStorageWrapper, persistCache } from "apollo3-cache-persist";
 
 export default function App() {
   const [dark, setDark] = useState(Appearance.getColorScheme() === "dark");
@@ -31,7 +32,11 @@ export default function App() {
       tokenVar(token);
       LoggedInVar(true);
     }
-    await preloadAssets();
+    await persistCache({
+      cache,
+      storage: new AsyncStorageWrapper(AsyncStorage),
+    });
+    return preloadAssets();
   };
   Appearance.addChangeListener(({ colorScheme }) =>
     colorScheme === "dark" ? setDark(true) : setDark(false)
