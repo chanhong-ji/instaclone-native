@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
-import { getUserLogin, getUserLogout } from "../apollo";
 import Photo from "../components/Photo";
 import ScreenLayout from "../components/ScreenLayout";
 import { COMMENT_FRAGMENT, PHOTO_FRAMENT } from "../fragment";
 
 const SEE_FEED = gql`
-  query seeFeed {
-    seeFeed {
+  query seeFeed($offset: Int) {
+    seeFeed(offset: $offset) {
       ...PhotoFragment
       comments {
         ...CommentFragment
@@ -29,7 +28,7 @@ const SEE_FEED = gql`
 `;
 
 function Feed({ navigation }) {
-  const { data, loading, refetch } = useQuery(SEE_FEED);
+  const { data, loading, refetch, fetchMore } = useQuery(SEE_FEED);
   const [refresh, setRefresh] = useState(false);
   const refeching = async () => {
     setRefresh(true);
@@ -39,6 +38,12 @@ function Feed({ navigation }) {
   return (
     <ScreenLayout loading={loading}>
       <FlatList
+        onEndReached={() => {
+          fetchMore({
+            variables: { offset: data?.seeFeed?.length },
+          });
+        }}
+        onEndReachedThreshold={1}
         refreshing={refresh}
         onRefresh={refeching}
         data={data?.seeFeed}
