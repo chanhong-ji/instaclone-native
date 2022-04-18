@@ -25,7 +25,7 @@ export const getUserLogout = async () => {
 };
 
 const httpLink = createHttpLink({
-  uri: "https://rude-warthog-82.loca.lt/graphql",
+  uri: "https://moody-dingo-47.loca.lt/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -42,6 +42,7 @@ export const cache = new InMemoryCache({
     Query: {
       fields: {
         seeFeed: offsetLimitPagination(),
+        seePhotoLikes: offsetLimitPagination(),
       },
     },
   },

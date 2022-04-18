@@ -91,7 +91,10 @@ function Photo({ id, user, file, caption, likes, commentCount, isLiked }) {
     <Container>
       <Header
         onPress={() => {
-          navigation.navigate("Profile");
+          navigation.navigate("Profile", {
+            username: user.username,
+            id: user.id,
+          });
         }}
       >
         <UserAvatar source={{ uri: user.avatar }} />
@@ -119,13 +122,16 @@ function Photo({ id, user, file, caption, likes, commentCount, isLiked }) {
             />
           </Action>
         </Actions>
-        <Likes onPress={() => navigation.navigate("Likes")}>
+        <Likes onPress={() => navigation.navigate("Likes", { id })}>
           좋아요 {likes}개
         </Likes>
         <Caption>
           <Username
             onPress={() => {
-              navigation.navigate("Profile");
+              navigation.navigate("Profile", {
+                username: user.username,
+                id: user.id,
+              });
             }}
           >
             {user.username}

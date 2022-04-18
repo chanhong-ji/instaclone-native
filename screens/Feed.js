@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import Photo from "../components/Photo";
 import ScreenLayout from "../components/ScreenLayout";
-import { COMMENT_FRAGMENT, PHOTO_FRAMENT } from "../fragment";
+import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragment";
 
 const SEE_FEED = gql`
   query seeFeed($offset: Int) {
@@ -23,7 +23,7 @@ const SEE_FEED = gql`
       }
     }
   }
-  ${PHOTO_FRAMENT}
+  ${PHOTO_FRAGMENT}
   ${COMMENT_FRAGMENT}
 `;
 

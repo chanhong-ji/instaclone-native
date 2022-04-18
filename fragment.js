@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const PHOTO_FRAMENT = gql`
+export const PHOTO_FRAGMENT = gql`
   fragment PhotoFragment on Photo {
     id
     file
@@ -18,5 +18,15 @@ export const COMMENT_FRAGMENT = gql`
     user {
       username
     }
+  }
+`;
+
+export const USER_FRAGMENT = gql`
+  fragment UserFragment on User {
+    id
+    username
+    avatar
+    isMe
+    isFollowing
   }
 `;
