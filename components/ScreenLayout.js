@@ -9,7 +9,7 @@ const Container = styled.View`
   background-color: ${(props) => props.theme.color.bg};
 `;
 
-function ScreenLayout({ loading, children }) {
+function ScreenLayout({ loading = false, children }) {
   return <Container>{loading ? <ActivityIndicator /> : children}</Container>;
 }
 export default ScreenLayout;

@@ -46,9 +46,9 @@ function StackNavFactory({ screenName }) {
         <Stack.Screen name="Search" component={Search} />
       ) : screenName === "Notifications" ? (
         <Stack.Screen name="Notifications" component={Notifications} />
-      ) : (
+      ) : screenName === "Me" ? (
         <Stack.Screen name="Me" component={Me} />
-      )}
+      ) : null}
       <Stack.Screen name="Photos" component={Photos} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Likes" component={Likes} />

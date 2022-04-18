@@ -3,12 +3,14 @@ import TabIcon from "../components/nav/TabIcon";
 import StackNavFactory from "../navigators/StackNavFactory";
 import { ThemeContext } from "styled-components/native";
 import { useContext } from "react";
-import { View } from "react-native";
+import { View, Image } from "react-native";
+import { useMe } from "../hooks/useMe";
 
 const Tab = createBottomTabNavigator();
 
 function LoggedInNav() {
   const theme = useContext(ThemeContext);
+  const data = useMe();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -66,9 +68,21 @@ function LoggedInNav() {
       <Tab.Screen
         name="TabMe"
         options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <TabIcon name="person" focused={focused} color={color} />
-          ),
+          tabBarIcon: ({ focused, color, size }) =>
+            data?.me?.avatar ? (
+              <Image
+                source={{ uri: data.me.avatar }}
+                style={{
+                  width: 25,
+                  height: 25,
+                  borderRadius: 12,
+                  borderColor: theme.color.text,
+                  borderWidth: focused ? 2 : 0,
+                }}
+              />
+            ) : (
+              <TabIcon name="person" focused={focused} color={color} />
+            ),
         }}
       >
         {() => <StackNavFactory screenName="Me" />}
