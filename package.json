@@ -14,6 +14,7 @@
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-navigation/bottom-tabs": "^6.3.1",
+    "@react-navigation/material-bottom-tabs": "^6.2.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/stack": "^6.2.1",
     "apollo3-cache-persist": "^0.14.0",
@@ -29,8 +30,10 @@
     "react-hook-form": "^7.29.0",
     "react-native": "0.64.3",
     "react-native-gesture-handler": "~2.1.0",
+    "react-native-paper": "^4.12.0",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
+    "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
     "styled-components": "^5.3.5"
   },
