@@ -1,6 +1,7 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useEffect } from "react";
 import { useMe } from "../hooks/useMe";
+import { getUserLogout } from "../apollo";
 
 function Me({ navigation, route }) {
   const data = useMe();
@@ -12,6 +13,11 @@ function Me({ navigation, route }) {
   return (
     <View>
       <Text>Me page</Text>
+      <TouchableOpacity onPress={async () => await getUserLogout()}>
+        <View>
+          <Text>Logout</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }

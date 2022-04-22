@@ -48,7 +48,6 @@ export default function Login({ navigation, route: { params } }) {
   return (
     <AuthLayout>
       <TextInput
-        value={watch("username")}
         placeholder="username"
         autoCapitalize="none"
         autoFocus
@@ -58,7 +57,6 @@ export default function Login({ navigation, route: { params } }) {
         onChangeText={(text) => setValue("username", text)}
       />
       <TextInput
-        value={watch("password")}
         placeholder="password"
         autoCapitalize="none"
         textContentType="password"

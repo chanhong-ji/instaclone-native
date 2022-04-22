@@ -16,6 +16,7 @@ export const COMMENT_FRAGMENT = gql`
     payload
     isMine
     user {
+      id
       username
     }
   }

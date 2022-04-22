@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AppLoading from "expo-app-loading";
-import { Ionicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import LoggedOutNav from "./navigators/LoggedOutNav";
@@ -19,12 +19,12 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const LoggedIn = useReactiveVar(LoggedInVar);
   const onFinish = () => setLoading(false);
-  const preloadAssets = () => {
+  const preloadAssets = async () => {
     const fontsToLoad = [Ionicons.font];
     const fontPromises = fontsToLoad.map((font) => Font.loadAsync(font));
     const assetsToLoad = [require("./assets/instagram_logo.png")];
     const assetPromises = assetsToLoad.map((asset) => Asset.loadAsync(asset));
-    return Promise.all([...fontPromises, ...assetPromises]);
+    await Promise.all([...fontPromises, ...assetPromises]);
   };
   const preload = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -35,6 +35,7 @@ export default function App() {
     await persistCache({
       cache,
       storage: new AsyncStorageWrapper(AsyncStorage),
+      // serialize: false,
     });
     return preloadAssets();
   };

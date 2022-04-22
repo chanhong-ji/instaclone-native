@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import propTypes from "prop-types";
 import styled from "styled-components/native";
-import { useWindowDimensions, Image } from "react-native";
+import { useWindowDimensions, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "styled-components/native";
@@ -43,10 +43,15 @@ const Likes = styled.Text`
 `;
 const Caption = styled.View`
   flex-direction: row;
+  margin-top: 5px;
 `;
 const CaptionText = styled.Text`
   color: ${(props) => props.theme.color.text};
   margin-left: 5px;
+`;
+const CommentText = styled.Text`
+  color: grey;
+  margin-top: 5px;
 `;
 
 const TOGGLELIKE_MUTATION = gql`
@@ -114,7 +119,17 @@ function Photo({ id, user, file, caption, likes, commentCount, isLiked }) {
               size={30}
             />
           </Action>
-          <Action onPress={() => navigation.navigate("Comments")}>
+          <Action
+            onPress={() =>
+              navigation.navigate("Comments", {
+                photoId: id,
+                userId: user.id,
+                username: user.username,
+                avatarUrl: user.avatar,
+                caption,
+              })
+            }
+          >
             <Ionicons
               name="chatbubble-outline"
               size={25}
@@ -138,6 +153,13 @@ function Photo({ id, user, file, caption, likes, commentCount, isLiked }) {
           </Username>
           <CaptionText>{caption}</CaptionText>
         </Caption>
+        {commentCount > 0 && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Comments", { photoId: id })}
+          >
+            <CommentText>댓글 {commentCount}개 모두 보기</CommentText>
+          </TouchableOpacity>
+        )}
       </InfoContainer>
     </Container>
   );

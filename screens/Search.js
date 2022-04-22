@@ -12,6 +12,7 @@ import DismissKeyBoard from "../components/DismissKeyBoard";
 import { gql, useLazyQuery } from "@apollo/client";
 import { PHOTO_FRAGMENT, USER_FRAGMENT } from "../fragment";
 import styled, { ThemeContext } from "styled-components/native";
+import { useTheme } from "@react-navigation/native";
 
 const SEARCHUSER_QUERY = gql`
   query searchUser($keyword: String!, $lastId: Int) {
@@ -48,11 +49,12 @@ const MessageText = styled.Text`
 `;
 
 const Input = styled.TextInput`
-  width: ${(props) => (props.width * 4) / 5};
+  width: ${(props) => (props.width * 4) / 5}px;
   height: 35px;
   border-radius: 10px;
-  background-color: ${(props) => props.theme.color.textInputBg};
   padding-left: 15px;
+  background-color: ${(props) => props.theme.color.textInputBg};
+  color: ${(props) => props.theme.color.text};
 `;
 
 function Search({ navigation }) {
@@ -70,7 +72,7 @@ function Search({ navigation }) {
   const SearchBox = () => (
     <Input
       placeholder="Search"
-      placeholderTextColor="black"
+      placeholderTextColor={theme.color.text}
       autoCorrect={false}
       autoCapitalize="none"
       onChangeText={(text) => setValue("keyword", text)}
