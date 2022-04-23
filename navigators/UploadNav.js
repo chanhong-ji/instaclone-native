@@ -26,13 +26,6 @@ function UploadNav() {
       }}
     >
       <Tab.Screen
-        name="Take"
-        component={TakePhoto}
-        options={{
-          tabBarLabel: <Text style={{ fontSize: 17 }}>Take</Text>,
-        }}
-      />
-      <Tab.Screen
         name="Select"
         options={{
           tabBarLabel: <Text style={{ fontSize: 17 }}>Select</Text>,
@@ -67,6 +60,13 @@ function UploadNav() {
           </Stack.Navigator>
         )}
       </Tab.Screen>
+      <Tab.Screen
+        name="Take"
+        component={TakePhoto}
+        options={{
+          tabBarLabel: <Text style={{ fontSize: 17 }}>Take</Text>,
+        }}
+      />
     </Tab.Navigator>
   );
 }

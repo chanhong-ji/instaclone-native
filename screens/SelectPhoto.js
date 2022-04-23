@@ -39,7 +39,6 @@ const HeaderRight = styled.Text`
 `;
 
 function SelectPhoto({ navigation }) {
-  const [ok, setOk] = useState(false);
   const [photos, setPhotos] = useState([]);
   const [selectedPhoto, setSelectedPhoto] = useState("");
   const theme = useContext(ThemeContext);
@@ -52,11 +51,9 @@ function SelectPhoto({ navigation }) {
   );
 
   const getPhotos = async () => {
-    if (ok) {
-      const { assets } = await MediaLibrary.getAssetsAsync();
-      setPhotos(assets);
-      setSelectedPhoto(assets[0]?.uri);
-    }
+    const { assets } = await MediaLibrary.getAssetsAsync();
+    setPhotos(assets);
+    setSelectedPhoto(assets[0]?.uri);
   };
 
   const getPermission = async () => {
@@ -65,33 +62,33 @@ function SelectPhoto({ navigation }) {
     if (accessPrivileges === "none" && canAskAgain) {
       const { accessPrivileges } = await MediaLibrary.requestPermissionsAsync();
       if (accessPrivileges !== "none") {
-        setOk(true);
         getPhotos();
       }
     } else if (accessPrivileges !== "none") {
-      setOk(true);
       getPhotos();
     }
   };
 
-  const renderItem = ({ item: photo }) => (
-    <ImageContainer onPress={() => setSelectedPhoto(photo.uri)}>
-      <IconContainer>
-        <Ionicons
-          name="checkmark-circle"
-          size={20}
-          color={photo.uri === selectedPhoto ? theme.color.blue : "white"}
+  const renderItem = ({ item: photo }) => {
+    return (
+      <ImageContainer onPress={() => setSelectedPhoto(photo.uri)}>
+        <IconContainer>
+          <Ionicons
+            name="checkmark-circle"
+            size={20}
+            color={photo.uri === selectedPhoto ? theme.color.blue : "white"}
+          />
+        </IconContainer>
+        <Image
+          source={{ uri: photo.uri }}
+          style={{
+            width: windowWidth / 4,
+            height: windowWidth / 4,
+          }}
         />
-      </IconContainer>
-      <Image
-        source={{ uri: photo.uri }}
-        style={{
-          width: windowWidth / 4,
-          height: windowWidth / 4,
-        }}
-      />
-    </ImageContainer>
-  );
+      </ImageContainer>
+    );
+  };
 
   useEffect(() => {
     getPermission();

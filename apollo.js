@@ -25,7 +25,7 @@ export const getUserLogout = async () => {
 };
 
 const httpLink = createHttpLink({
-  uri: "https://moody-dingo-47.loca.lt/graphql",
+  uri: "https://average-termite-96.loca.lt/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
