@@ -49,7 +49,6 @@ function TabsNav() {
       <Tab.Screen
         name="Camera"
         component={View}
-        // 리스너 추가
         listeners={({ navigation }) => {
           return {
             tabPress: (event) => {

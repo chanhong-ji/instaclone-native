@@ -15,6 +15,7 @@ export const darkTheme = {
     inputBg: "grey",
     textInputBg: "rgba(255, 255, 255, 0.1)",
     border: "rgba(255, 255, 255, 0.3)",
+    blue: "#0095F6",
   },
 };
 export const lightTheme = {
@@ -25,5 +26,6 @@ export const lightTheme = {
     inputBg: "grey",
     textInputBg: "rgba(0, 0, 0, 0.1)",
     border: "rgba(0, 0, 0, 0.3)",
+    blue: "#0095F6",
   },
 };
