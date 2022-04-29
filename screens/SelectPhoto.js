@@ -1,6 +1,5 @@
 import react, { useState, useEffect, useContext } from "react";
 import {
-  Text,
   FlatList,
   Image,
   useWindowDimensions,
@@ -41,19 +40,31 @@ const HeaderRight = styled.Text`
 function SelectPhoto({ navigation }) {
   const [photos, setPhotos] = useState([]);
   const [selectedPhoto, setSelectedPhoto] = useState("");
+  const [selectedPhotoLocalUri, setSelectedPhotoLocalUri] = useState("");
   const theme = useContext(ThemeContext);
   const { width: windowWidth } = useWindowDimensions();
 
   const headerRight = () => (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("UploadForm", {
+          file: selectedPhotoLocalUri,
+        })
+      }
+    >
       <HeaderRight>Upload</HeaderRight>
     </TouchableOpacity>
   );
 
   const getPhotos = async () => {
     const { assets } = await MediaLibrary.getAssetsAsync();
-    setPhotos(assets);
-    setSelectedPhoto(assets[0]?.uri);
+    let photos = assets;
+    for (let photo of photos) {
+      photo.localUri = await (
+        await MediaLibrary.getAssetInfoAsync(photo)
+      ).localUri;
+    }
+    setPhotos(photos);
   };
 
   const getPermission = async () => {
@@ -69,33 +80,39 @@ function SelectPhoto({ navigation }) {
     }
   };
 
-  const renderItem = ({ item: photo }) => {
-    return (
-      <ImageContainer onPress={() => setSelectedPhoto(photo.uri)}>
-        <IconContainer>
-          <Ionicons
-            name="checkmark-circle"
-            size={20}
-            color={photo.uri === selectedPhoto ? theme.color.blue : "white"}
-          />
-        </IconContainer>
-        <Image
-          source={{ uri: photo.uri }}
-          style={{
-            width: windowWidth / 4,
-            height: windowWidth / 4,
-          }}
+  const renderItem = ({ item: photo }) => (
+    <ImageContainer
+      onPress={() => {
+        setSelectedPhoto(photo.uri);
+        setSelectedPhotoLocalUri(photo.localUri);
+      }}
+    >
+      <IconContainer>
+        <Ionicons
+          name="checkmark-circle"
+          size={20}
+          color={photo.uri === selectedPhoto ? theme.color.blue : "white"}
         />
-      </ImageContainer>
-    );
-  };
+      </IconContainer>
+      <Image
+        source={{ uri: photo.uri }}
+        style={{
+          width: windowWidth / 4,
+          height: windowWidth / 4,
+        }}
+      />
+    </ImageContainer>
+  );
 
   useEffect(() => {
     getPermission();
+  }, []);
+
+  useEffect(() => {
     navigation.setOptions({
       headerRight,
     });
-  }, []);
+  }, [selectedPhoto]);
 
   return (
     <Container>

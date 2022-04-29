@@ -3,28 +3,15 @@ import { gql, useQuery } from "@apollo/client";
 import { FlatList } from "react-native";
 import Photo from "../components/Photo";
 import ScreenLayout from "../components/ScreenLayout";
-import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragment";
+import { FEED_PHOTO_FRAGMENT } from "../fragment";
 
 const SEE_FEED = gql`
   query seeFeed($offset: Int) {
     seeFeed(offset: $offset) {
-      ...PhotoFragment
-      comments {
-        ...CommentFragment
-      }
-      isMine
-      isLiked
-      createdAt
-      updatedAt
-      user {
-        id
-        username
-        avatar
-      }
+      ...FeedPhotoFragment
     }
   }
-  ${PHOTO_FRAGMENT}
-  ${COMMENT_FRAGMENT}
+  ${FEED_PHOTO_FRAGMENT}
 `;
 
 function Feed({ navigation }) {
